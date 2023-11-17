@@ -14,5 +14,7 @@ if extract_samples.lower() == 'y':
     samples_extractor = SamplesExtractor(frames_dir, confidence_threshold=0.3)
     samples_extractor.extract_samples()
 
-gui_initializer = GUIInitializer(sample_x_size=128)
-gui_initializer.initialize_gui()
+open_gui = input('Open GUI (Y/n)? ')
+if extract_samples.lower() == 'y':
+    gui_initializer = GUIInitializer(sample_x_size=128)
+    gui_initializer.initialize_gui()
