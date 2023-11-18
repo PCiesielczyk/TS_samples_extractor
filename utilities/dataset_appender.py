@@ -2,7 +2,7 @@ import csv
 import os
 import logging
 from TSI.data_storage.file_loader import classes_csv_file_path, train_dir_path
-from TS_samples_extractor.utils.file_loader import sample_file_path, sample_train_dir_path
+from TS_samples_extractor.utilities.file_loader import sample_file_path, sample_train_dir_path
 
 logging.basicConfig(level=logging.INFO)
 

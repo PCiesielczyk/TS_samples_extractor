@@ -1,16 +1,18 @@
+import logging
 import os
-import logging
-import numpy as np
+import sys
 import tkinter as tk
-import logging
-from utils.file_loader import meta_file_path, sample_train_dir_path, sample_filenames, sample_file_path, \
-    no_class_meta_path
-from utils.dataset_appender import append_dataset, move_sample_to_dataset, determine_new_class_id, remove_sample
-from itertools import cycle
+from itertools import cycle, islice
 from tkinter import ttk, Text
+
+import numpy as np
 from PIL import ImageTk, Image
+
 from TSI.recognition.identification.class_mapper import ClassMapper
 from TSI.recognition.identification.identification_model import IdentificationModel
+from utilities.dataset_appender import append_dataset, move_sample_to_dataset, determine_new_class_id, remove_sample
+from utilities.file_loader import meta_file_path, sample_train_dir_path, sample_filenames, sample_file_path, \
+    no_class_meta_path
 
 
 class GUIInitializer:
@@ -29,12 +31,12 @@ class GUIInitializer:
         self._combo = ttk.Combobox(state="readonly", width=45, font=("arial", 10))
         self._meta_label = ttk.Label(self._top)
         self._class_samples_label = ttk.Label(self._top)
-        self._samples_cycle = cycle(sample_filenames())
+        self._samples_cycle = islice(cycle(sample_filenames()), len(sample_filenames()))
         self._new_class_text = Text(self._top, height=1, width=40)
 
     def _get_sample(self, sample_path) -> None:
 
-        image = Image.open(sample_path)
+        image = Image.open(sample_path).convert('RGB')
         width, height = image.size
         x_ratio = self.sample_x_size / width
         sample_y_size = height * x_ratio
@@ -98,10 +100,14 @@ class GUIInitializer:
         meta_label.grid(column=1, row=4, padx=10, pady=10)
 
     def _next_sample(self):
-        self._current_sample = next(self._samples_cycle)
-        self._get_sample(sample_file_path(self._current_sample))
-        self._display_combo()
-        self._display_meta()
+        try:
+            self._current_sample = next(self._samples_cycle)
+            self._get_sample(sample_file_path(self._current_sample))
+            self._display_combo()
+            self._display_meta()
+        except StopIteration:
+            logging.info('No more samples to process. Exiting...')
+            sys.exit()
 
     def _skip_sample(self):
         remove_sample(self._current_sample)

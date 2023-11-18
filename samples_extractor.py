@@ -1,23 +1,23 @@
-import uuid
-import os
 import logging
+import os
+
+from PIL import Image
 
 from TSI.recognition.detection.detection_model import DetectionModel
-from PIL import Image
 
 
 # filter to ignore specific watermarks on video frames
 def match_filter(x1, y1, x2, y2):
-    upper_right_x1 = 1610
-    lower_right_y2 = 330
+    upper_right_x1 = 1060
+    lower_right_y2 = 220
 
-    upper_left_x2_1 = 280
-    lower_left_y2_1 = 110
+    upper_left_x2_1 = 170
+    lower_left_y2_1 = 80
 
-    upper_left_x2_2 = 130
-    lower_left_y2_2 = 130
+    upper_left_x2_2 = 90
+    lower_left_y2_2 = 90
 
-    upper_y1 = 950
+    upper_y1 = 660
 
     if x1 > upper_right_x1 and y2 < lower_right_y2:
         return True
@@ -62,8 +62,8 @@ class SamplesExtractor:
                 cropped_image = image.crop((x1, y1, x2, y2))
 
                 output_filename = str(filename_index).zfill(6) + '.jpg'
-                # logging.info(f'x1: {x1}, y1: {y1}, x2: {x2}, y2: {y2}')
-                # logging.info(f'From {image_filename_path} saved to {output_filename}')
+                logging.info(f'x1: {x1}, y1: {y1}, x2: {x2}, y2: {y2}')
+                logging.info(f'From {image_filename_path} saved to {output_filename}')
                 output_file_path = os.path.join('temp', output_filename)
 
                 cropped_image.save(output_file_path)
