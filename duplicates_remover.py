@@ -35,9 +35,9 @@ class DuplicatesRemover:
                 else:
                     continue
 
-                similarity = calculate_ssim(base_image, compared_image) * 100
+                similarity = calculate_ssim(base_image, compared_image)
 
                 if similarity >= self.similarity_threshold:
                     os.remove(compared_image_path)
                     print(f'Removed {samples[compared_index]} as duplicate of {samples[base_index]}. '
-                          f'Similarity: {similarity:.2f}%')
+                          f'Similarity: {similarity:.4f}')
