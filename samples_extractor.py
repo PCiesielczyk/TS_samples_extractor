@@ -35,8 +35,7 @@ class SamplesExtractor:
     def __init__(self, images_dir_path: str, confidence_threshold: float):
         logging.basicConfig(level=logging.INFO)
         self.images_dir_path = images_dir_path
-        self.confidence_threshold = confidence_threshold
-        self._detection_model = DetectionModel()
+        self._detection_model = DetectionModel(confidence_threshold=confidence_threshold)
 
         if not os.path.isdir('temp'):
             os.mkdir('temp')
@@ -55,7 +54,7 @@ class SamplesExtractor:
                 x1, y1 = traffic_sign.x_min, traffic_sign.y_min
                 x2, y2 = traffic_sign.x_max, traffic_sign.y_max
 
-                if match_filter(x1, y1, x2, y2) or traffic_sign.confidence < self.confidence_threshold:
+                if match_filter(x1, y1, x2, y2):
                     count -= 1
                     continue
 
